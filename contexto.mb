@@ -1,0 +1,45 @@
+
+
+📑 MASTER BLUEPRINT V3: App Acadêmico com Banco Local (SQLite)
+1. Stack Tecnológica
+Frontend: React + Vite (TypeScript) com TailwindCSS.
+
+Banco de Dados (Local): SQLite (gerenciado via Prisma ORM).
+
+Ambiente: Desktop Local Portátil (Rodando direto da pasta do projeto).
+
+2. Estrutura de Módulos (Organização do Código)
+MOD_DB_LOCAL: Arquivo database.db e esquemas do Prisma (Tabelas SQL: disciplinas, atividades_aps, ap_checklist).
+
+MOD_AUTH: Login/Perfil local para persistência e separação dos dados de usuários no banco SQL.
+
+MOD_ACADEMIC_CORE: CRUD de disciplinas.
+
+MOD_ACTIVITY_MANAGER: Controle de APs (Máximo 2 por disciplina).
+
+MOD_CHECKLIST: Sub-tarefas com caminhos de arquivos locais.
+
+MOD_INSIGHTS: Gráficos Recharts e cálculo automático de progresso via queries SQL.
+
+UI_SIDEBAR: Barra lateral direita com buscas e filtros.
+
+3. 🚀 As 10 Dicas de Implementação (Instruções para a IA)
+Dica 1 (Banco Autocriável e Portátil): O arquivo database.db deve ser configurado com caminho relativo dentro da própria pasta do projeto. A IA deve configurar um script inicial que verifica se o arquivo existe; se não existir, ele deve criar o arquivo e rodar as migrations do Prisma automaticamente no primeiro boot.
+
+Dica 2 (Upload de Arquivos Físicos): Ao anexar um arquivo no checklist, o sistema deve copiar o arquivo fisicamente para uma pasta local ./storage/uploads dentro do diretório do projeto. No banco de dados SQLite, deve ser salvo apenas a string com o caminho relativo do arquivo (ex: "/storage/uploads/ap1_calculo.pdf").
+
+Dica 3 (Trava de Segurança SQL para APs): Antes de executar o INSERT de uma nova AP na tabela atividades_aps, o sistema deve rodar uma query de contagem (COUNT). Se o resultado de APs para aquela disciplina_id já for igual a 2, a operação deve ser abortada e um alerta visual deve ser exibido.
+
+Dica 4 (Reatividade de Interface): Use estados globais ou invalidação de cache de query para que, no momento em que um checklist for marcado na barra lateral, os gráficos do Dashboard central recalculados via SQL reflitam a mudança instantaneamente sem precisar de refresh na página.
+
+Dica 5 (Validação Rígida de RA): O campo de input do RA na tela de login/cadastro deve aceitar estritamente apenas caracteres numéricos. Qualquer tentativa de digitar letras deve ser bloqueada diretamente no teclado do usuário.
+
+Dica 6 (Integridade de Cascata - Delete): Configure as chaves estrangeiras (Foreign Keys) no SQLite com ON DELETE CASCADE. Se o aluno deletar uma disciplina, todas as APs e checklists atrelados a ela devem ser apagados automaticamente do banco para não deixar dados órfãos.
+
+Dica 7 (Filtros Inteligentes de Prazo): Crie uma query na Sidebar que ordene as tarefas por data de entrega mais próxima. Tarefas com menos de 48 horas para o prazo final devem receber uma classe Tailwind de pulsação ou cor de alerta (ex: text-red-500 animate-pulse).
+
+Dica 8 (Modo Noturno Automático): O Tailwind deve ser configurado para seguir o tema do sistema operacional do computador onde o projeto estiver rodando (usando a estratégia media ou class para toggle de Dark Mode).
+
+Dica 9 (Logs de Operação para o Professor): Crie uma pequena tela ou componente oculto de "Logs do Banco", onde o professor possa ver as queries SQL reais sendo executadas (ex: SELECT * FROM disciplinas...) quando você clica nos botões. Isso prova que o banco de dados está funcionando de verdade.
+
+Dica 10 (Script de Inicialização Simples para a Faculdade): Configure o arquivo package.json com um comando amigável (ex: npm run dev:install) que instale as dependências e prepare o banco de dados com um único comando, facilitando a vida se você precisar rodar o projeto do zero na máquina da faculdade.

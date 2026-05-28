@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./database.db"
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  ra        String   @unique
+  email     String   @unique
+  senha     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  disciplinas Disciplina[]
+}
+
+model Disciplina {
+  id        Int           @id @default(autoincrement())
+  nome      String
+  descricao String?
+  usuarioId Int
+  usuario   Usuario       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  aps       AtividadeAP[]
+}
+
+model AtividadeAP {
+  id           Int             @id @default(autoincrement())
+  titulo       String
+  descricao    String?
+  disciplinaId Int
+  disciplina   Disciplina      @relation(fields: [disciplinaId], references: [id], onDelete: Cascade)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  checklists   ChecklistItem[]
+}
+
+model ChecklistItem {
+  id          Int         @id @default(autoincrement())
+  descricao   String
+  concluido   Boolean     @default(false)
+  arquivoUrl  String?
+  atividadeId Int
+  atividade   AtividadeAP @relation(fields: [atividadeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
