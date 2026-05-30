@@ -1,71 +1,80 @@
-# Projeto Fênix
+# 🦅 Projeto Fênix
 
-Aplicação acadêmica local-first para organização de disciplinas, atividades parciais, checklist e progresso.
+O **Projeto Fênix** é uma plataforma acadêmica projetada para ajudar estudantes a gerenciarem suas disciplinas, avaliações, checklists de tarefas e armazenarem arquivos com segurança e eficiência. 
 
-## Visão geral
+A aplicação utiliza uma arquitetura moderna e robusta, com frontend em **React/Vite** e um backend integrado rodando **Express, Prisma e SQLite** localmente.
 
-- Frontend: React + TypeScript + Vite.
-- Backend local: Express + Prisma + SQLite.
-- Armazenamento de usuário/dados offline: IndexedDB via Dexie.
-- Estado global leve: Zustand.
-- Recursos: autenticação, onboarding, gestão de disciplinas, APs, checklist, upload de arquivos, backup/import e gráfico de progresso.
+---
 
-## Funcionalidades principais
+## 🚀 Principais Funcionalidades
 
-- Cadastro de usuário e login com JWT.
-- Onboarding inicial com curso, semestre atual e total de semestres.
-- Dashboard com métricas de progresso e visões de tarefas pendentes.
-- Lista de disciplinas com busca, edição e exclusão.
-- Gestão de até 2 APs por disciplina (ex: Avaliação Parcial + Prova Final).
-- Checklist por AP com conclusão de itens, data de entrega e upload de arquivos.
-- Backup local JSON e importação de dados.
-- Insights de progresso calculados automaticamente por disciplina.
+- **Gestão Acadêmica Completa:** Crie disciplinas, acompanhe atividades pendentes (APs) e gerencie o progresso geral.
+- **Checklists e Arquivos:** Cada atividade permite a criação de checklists e uploads de arquivos, tudo salvo diretamente no seu banco local SQLite.
+- **Isolamento de Contas:** Sistema de autenticação local. Múltiplos alunos podem usar o sistema na mesma máquina sem que seus dados se cruzem.
+- **Fenix AI Advisor:** Um módulo inteligente (integrado à API do Google Gemini) que analisa o seu progresso, checklists e atividades, oferecendo recomendações práticas e motivacionais personalizadas para os seus estudos.
+- **Privacidade e Segurança:** Diferente de aplicações na nuvem tradicionais, seus arquivos e informações acadêmicas são gravados nativamente de forma persistida no backend local (`prisma/database.db`).
 
-## Estrutura do código
+---
 
-- `src/App.tsx`: roteamento principal e proteção de rotas.
-- `src/store/useAppStore.ts`: estado de sessão e autenticação.
-- `src/modules/MOD_AUTH`: login e cadastro.
-- `src/modules/MOD_USER_PROFILE`: onboarding de curso e semestre.
-- `src/modules/MOD_ACADEMIC_CORE`: dashboard, disciplinas e cards.
-- `src/modules/MOD_ACTIVITY_MANAGER`: gerenciamento de APs por disciplina.
-- `src/modules/MOD_CHECKLIST`: gerenciamento de itens de checklist.
-- `src/modules/MOD_FILE_VAULT`: upload/download de arquivos e backup.
-- `src/modules/MOD_INSIGHTS_ENGINE`: widget de progresso e gráfico.
-- `src/modules/MOD_DB/db.ts`: definição de esquema Dexie para IndexedDB.
-- `server/`: backend Express com rotas de autenticação, academic, activity, checklist e insights.
+## 🛠️ Tecnologias Utilizadas
 
-## Como rodar o projeto
+### Frontend
+- **React (com Vite):** Interface rápida e reativa.
+- **TypeScript:** Segurança de tipagem em todo o código.
+- **Zustand:** Gerenciamento de estado global da aplicação.
 
-1. Instalar dependências:
-   ```powershell
+### Backend
+- **Node.js + Express:** API local para intermediação segura.
+- **Prisma ORM:** Modelagem estruturada e acesso otimizado aos dados.
+- **SQLite:** Banco de dados relacional armazenado localmente em arquivo físico (migrado do IndexedDB para garantir maior persistência).
+
+### Inteligência Artificial
+- **Google Gemini API:** Utilizado no componente *AI Advisor* para interpretar os dados acadêmicos e retornar sugestões com base no progresso.
+
+---
+
+## ⚙️ Arquitetura e Fluxo de Dados
+
+1. **Frontend (Vistas e Lógica):** Módulos segmentados (`MOD_ACADEMIC_CORE`, `MOD_ACTIVITY_MANAGER`, `MOD_INSIGHTS_ENGINE`, etc.) enviam requisições assíncronas para a API local.
+2. **Store (Zustand):** O `useFenixStore` e `useAppStore` consolidam todos os dados em memória e controlam o estado reativo.
+3. **Backend Local (Express):** Recebe a requisição garantindo autenticação e o isolamento de informações do usuário.
+4. **Camada de Persistência:** O Prisma processa a query e grava definitivamente no arquivo SQLite.
+
+---
+
+## 💻 Como Rodar o Projeto
+
+### Pré-requisitos
+- Node.js (versão 18+ recomendada)
+- NPM, Yarn ou pnpm instalado
+
+### Comandos Úteis
+
+1. **Instale as dependências:**
+   ```bash
    npm install
    ```
-2. Iniciar o servidor e o frontend juntos:
-   ```powershell
+
+2. **Inicie o projeto (executará o servidor backend e o frontend simultaneamente dependendo do script):**
+   ```bash
    npm run dev
    ```
-3. Abrir o link gerado pelo Vite, geralmente `http://localhost:5173`.
 
-### Comandos úteis
+3. **Gerar builds ou verificar estilos:**
+   - `npm run build`: compila o projeto.
+   - `npm run lint`: executa a verificação de código.
+   - `npm run preview`: visualiza a build de produção local.
 
-- `npm run dev`: inicia o servidor local e o app Vite.
-- `npm run build`: compila o frontend e o TypeScript.
-- `npm run lint`: executa o ESLint.
-- `npm run preview`: pré-visualiza a build.
+---
 
-## Documentação adicional
+## 🤖 Configurando o Fenix AI Advisor
 
-- `INSTRUCOES.md`: guia de uso, backup e fluxo de execução.
-- `contexto.md`: regras de negócio, arquitetura dos módulos e objetivos do projeto.
+Para que o Módulo de Insights Avançados funcione corretamente, é necessário configurar a IA:
+1. Abra o painel (Dashboard).
+2. Localize o **Insights Widget**.
+3. Insira a sua API Key do Google Gemini (se solicitada pela interface). O sistema a utilizará localmente para as análises.
+4. Clique em "Gerar Insight com IA" e receba dicas personalizadas!
 
-## Observações importantes
+---
 
-- O `README.md` original era um template genérico de React/Vite. Este README agora descreve o Projeto Fênix de forma específica.
-- O módulo de insights (`MOD_INSIGHTS_ENGINE`) existe e mostra métricas de progresso. Atualmente ele não contém integração com IA; ele calcula porcentagens com base nos itens de checklist.
-
-## Melhorias sugeridas
-
-- Adicionar um README de desenvolvimento para detalhar as APIs do backend.
-- Documentar a arquitetura de dados entre backend Prisma e IndexedDB local.
-- Se desejar implementar IA, criar um módulo de recomendações ou sugestões de estudo baseado no progresso.
+*Para mais detalhes sobre as regras de negócio ou instruções detalhadas de backup, verifique os arquivos `contexto.md` e `INSTRUCOES.md`.*
